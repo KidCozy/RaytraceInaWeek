@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\pencu\source\repos\raytrace_console\raytrace_1</FILEPATH>
+      <FILENAME>3dmath.h</FILENAME>
+      <LINE>17</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Variable 'Vector3::&lt;anonymous-tag&gt;::&lt;anonymous-tag&gt;::_1' is uninitialized. Always initialize a member variable (type.6).</DESCRIPTION>
+    <FUNCTION>Vector3::{ctor}</FUNCTION>
+    <DECORATED>??0Vector3@@QAE@XZ</DECORATED>
+    <FUNCLINE>17</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\pencu\source\repos\raytrace_console\raytrace_1</FILEPATH>
+      <FILENAME>3dmath.h</FILENAME>
+      <LINE>17</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Variable 'Vector3::&lt;anonymous-tag&gt;::e' is uninitialized. Always initialize a member variable (type.6).</DESCRIPTION>
+    <FUNCTION>Vector3::{ctor}</FUNCTION>
+    <DECORATED>??0Vector3@@QAE@XZ</DECORATED>
+    <FUNCLINE>17</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\pencu\source\repos\raytrace_console\raytrace_1</FILEPATH>
+      <FILENAME>3dmath.h</FILENAME>
+      <LINE>17</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Variable 'Vector3::&lt;anonymous-tag&gt;::&lt;anonymous-tag&gt;::_2' is uninitialized. Always initialize a member variable (type.6).</DESCRIPTION>
+    <FUNCTION>Vector3::{ctor}</FUNCTION>
+    <DECORATED>??0Vector3@@QAE@XZ</DECORATED>
+    <FUNCLINE>17</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\pencu\source\repos\raytrace_console\raytrace_1</FILEPATH>
+      <FILENAME>3dmath.h</FILENAME>
+      <LINE>17</LINE>
+      <COLUMN>1</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Variable 'Vector3::&lt;anonymous-tag&gt;::&lt;anonymous-tag&gt;::_0' is uninitialized. Always initialize a member variable (type.6).</DESCRIPTION>
+    <FUNCTION>Vector3::{ctor}</FUNCTION>
+    <DECORATED>??0Vector3@@QAE@XZ</DECORATED>
+    <FUNCLINE>17</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>
