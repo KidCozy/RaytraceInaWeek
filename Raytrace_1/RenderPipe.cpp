@@ -5,7 +5,8 @@
 bool RenderPipe::Init(HDC dc)
 {
 	MainDC = dc;
-
+	OutImage = std::ofstream("image.png");
+	AllocConsole();
 	return true;
 }
 
@@ -14,28 +15,50 @@ bool RenderPipe::Update()
 	if (RenderDone)
 		return false;
 
-	Vector3 LowLeftCorner(-2.0f, -1.0f, -1.0f);
+	Vector3 LowLeftCorner(-2.0f, -1.5f, -1.0f);
+	Hittable* List[2];
+	List[0] = new Sphere(Vector3(0, 0, -1), 0.5f);
+	List[1] = new Sphere(Vector3(0, -100.5f, -1), 100);
+
+	Hittable* World = new HittableList(List, 2);
+	Camera Cam;
+	// 수직과 수평 벡터의 비율은 원하는 뷰포트 비율로 설정한다.
+	// 나의 경우 (800, 600) 이므로 4:3 비율로 정하였다.
 	Vector3 Horizontal(4.0f, 0.0f, 0.0f);
 	Vector3 Vertical(0.0f, 3.0f, 0.0f);
 	Vector3 Origin(0.0f, 0.0f, 0.0f);
+	
+	OutImage << "P3\n" << WIDTH << " " << HEIGHT << "\n255\n";
 
 	for (int y = HEIGHT-1; y >= 0; y--)
 	{
 		for (int x = 0; x < WIDTH; x++)
 		{
-			float u = float(x) / float(WIDTH);
-			float v = float(y) / float(HEIGHT);
+			Vector3 color(0.0f, 0.0f, 0.0f);
 
-			Ray ray(Origin, LowLeftCorner + u * Horizontal + v * Vertical);
-			Vector3 color = Color(ray);
+			for (int s = 0; s < SAMPLE; s++)
+			{
+				float u = float(x + random_double()) / float(WIDTH);
+				float v = float(y + random_double()) / float(HEIGHT);
+
+				Ray ray = Cam.GetRay(u, v);
+
+				color += Color(ray, World);
+			}
+
+			color /= float(SAMPLE);
 
 			int ir = int(255.99*color[0]);
 			int ig = int(255.99*color[1]);
 			int ib = int(255.99*color[2]);
 
+			OutImage << ir << " " << ig << " " << ib << "\n";
+
 			ScreenColors[y][x] = RGB(ir, ig, ib);
 		}
 	}
+
+	OutImage.close();
 
 	return true;
 }
@@ -56,7 +79,7 @@ bool RenderPipe::Render()
 	{
 		for (int x = 0; x < WIDTH; x++)
 		{
-			SetPixel(MainDC, x, y, ScreenColors[y][x]);
+			SetPixel(MainDC, x, y, ScreenColors[HEIGHT-y][x]);
 			
 		}
 	}
@@ -72,7 +95,7 @@ bool RenderPipe::Release()
 	return true;
 }
 
-bool RenderPipe::HitSphere(const Vector3 & center, float radius, const Ray & ray)
+float RenderPipe::HitSphere(const Vector3 & center, float radius, const Ray & ray)
 {
 	Vector3 oc = ray.Origin() - center;
 
@@ -82,7 +105,40 @@ bool RenderPipe::HitSphere(const Vector3 & center, float radius, const Ray & ray
 
 	float discriminant = b * b - 4 * a*c;
 
-	return (discriminant > 0);
+	if (discriminant < 0)
+		return -1.0;
+
+	else
+		return (-b - sqrt(discriminant)) / (2.0*a);
+}
+
+Vector3 RenderPipe::Color(const Ray & ray, Hittable* World)
+{
+	HitRecord rec;
+
+	if (World->hit(ray, 0.0f, FLT_MAX, rec))
+	{
+		Vector3 Target = rec.p + rec.normal + RandomInUnitSphere();
+		return 0.5f* Color(Ray(rec.p, Target - rec.p), World);
+	}
+	else
+	{
+		Vector3 Direction = unit_vector(ray.Direction());
+		float t = 0.5f * (Direction.y() + 1.0f);
+		return (1.0f - t) * Vector3(1.0f, 1.0f, 1.0f) + t * Vector3(0.5f, 0.7f, 1.0f);
+	}
+
+	//float t = HitSphere(Vector3(0, 0, -1), 0.5f, ray);
+
+	//if (t > 0.0)
+	//{
+	//	Vector3 N = unit_vector(ray.PointAtParameter(t) - Vector3(0, 0, -1));
+	//	return 0.5f * Vector3(N.x() + 1, N.y() + 1, N.z() + 1);
+	//}
+	//Vector3 Direction = unit_vector(ray.Direction());
+
+	//t = 0.5*(Direction.y() + 1.0);
+	//return (1.0f - t)*Vector3(1.0, 1.0, 1.0) + t * Vector3(0.5, 0.7, 1.0);
 }
 
 RenderPipe::RenderPipe()
