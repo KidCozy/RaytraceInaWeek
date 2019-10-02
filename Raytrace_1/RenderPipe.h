@@ -9,17 +9,19 @@
 #include<iostream>
 #include<string>
 #include<fstream>
-
+#include<time.h>
 #define WIDTH 800
 #define HEIGHT 600
-#define SAMPLE 1
+#define RATIO WIDTH/HEIGHT
+#define SAMPLE 100
 class RenderPipe
 {
 private:
 	HDC MainDC;
 	COLORREF ScreenColors[HEIGHT][WIDTH];
 	std::ofstream OutImage;
-
+	time_t Timer;
+	double ElapsedTime;
 
 public:
 	bool RenderDone = false;
@@ -31,7 +33,7 @@ public:
 	bool Render();
 	bool Release();
 
-	Vector3 Color(const Ray& ray, Hittable *World);
+	Vector3 Color(const Ray& ray, Hittable *World, int depth);
 	float HitSphere(const Vector3& center, float radius, const Ray& ray);
 
 	RenderPipe();

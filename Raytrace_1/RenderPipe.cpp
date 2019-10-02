@@ -7,6 +7,9 @@ bool RenderPipe::Init(HDC dc)
 	MainDC = dc;
 	OutImage = std::ofstream("image.png");
 	AllocConsole();
+
+	Timer = time(NULL);
+
 	return true;
 }
 
@@ -16,11 +19,12 @@ bool RenderPipe::Update()
 		return false;
 
 	Vector3 LowLeftCorner(-2.0f, -1.5f, -1.0f);
-	Hittable* List[2];
-	List[0] = new Sphere(Vector3(0, 0, -1), 0.5f);
-	List[1] = new Sphere(Vector3(0, -100.5f, -1), 100);
-
-	Hittable* World = new HittableList(List, 2);
+	Hittable* List[4];
+	List[0] = new Sphere(Vector3(0, 0, -1), 0.5f, new Lambertian(Vector3(0.8f, 0.3f, 0.3f)));
+	List[1] = new Sphere(Vector3(0, -100.5f, -1), 100, new Lambertian(Vector3(0.8f,0.8f,0.0f)));
+	List[2] = new Sphere(Vector3(1.0f, 0.0f, -1.0f), 0.5f, new Metal(Vector3(0.8f, 0.6f, 0.2f)));
+	List[3] = new Sphere(Vector3(-1.0f, 0.0f, -1.0f), 0.5f, new Metal(Vector3(0.8f, 0.8f, 0.8f)));
+	Hittable* World = new HittableList(List, 4);
 	Camera Cam;
 	// 수직과 수평 벡터의 비율은 원하는 뷰포트 비율로 설정한다.
 	// 나의 경우 (800, 600) 이므로 4:3 비율로 정하였다.
@@ -43,20 +47,23 @@ bool RenderPipe::Update()
 
 				Ray ray = Cam.GetRay(u, v);
 
-				color += Color(ray, World);
+				color += Color(ray, World, 0);
 			}
 
 			color /= float(SAMPLE);
+			color = Vector3(sqrt(color[0]), sqrt(color[1]), sqrt(color[2]));
 
 			int ir = int(255.99*color[0]);
 			int ig = int(255.99*color[1]);
 			int ib = int(255.99*color[2]);
 
-			OutImage << ir << " " << ig << " " << ib << "\n";
+		//	OutImage << ir << " " << ig << " " << ib << "\n";
 
 			ScreenColors[y][x] = RGB(ir, ig, ib);
 		}
 	}
+
+
 
 	OutImage.close();
 
@@ -65,14 +72,12 @@ bool RenderPipe::Update()
 
 bool RenderPipe::Render()
 {
-	wchar_t Buffer[256];
-	int x = ScreenColors[0][1];
-	wsprintf(Buffer, L"%d", x);
-	TextOut(MainDC, 0, 0, Buffer, 2);
+
+	ElapsedTime = (double)(time(NULL)-Timer);
+
 
 	if (RenderDone)
 		return false;
-
 
 
 	for (int y = 0; y < HEIGHT; y++)
@@ -83,7 +88,12 @@ bool RenderPipe::Render()
 			
 		}
 	}
-	
+
+	wchar_t Buffer[256];
+	wsprintf(Buffer, L"%f", ElapsedTime);
+	TextOutW(MainDC, 0, 0, Buffer, 1);
+	std::cout << ElapsedTime << std::endl;
+	printf("%f", ElapsedTime);
 
 	RenderDone = true;
 
@@ -112,14 +122,21 @@ float RenderPipe::HitSphere(const Vector3 & center, float radius, const Ray & ra
 		return (-b - sqrt(discriminant)) / (2.0*a);
 }
 
-Vector3 RenderPipe::Color(const Ray & ray, Hittable* World)
+Vector3 RenderPipe::Color(const Ray & ray, Hittable* World, int depth)
 {
 	HitRecord rec;
 
-	if (World->hit(ray, 0.0f, FLT_MAX, rec))
+	if (World->hit(ray, 0.001f, FLT_MAX, rec))
 	{
+		Ray scattered;
+		Vector3 attenuation;
+
+		if (depth < 50 && rec.matptr->Scatter(ray, rec, attenuation, scattered))
+			return attenuation * Color(scattered, World, depth + 1);
+		else
+			return Vector3(0, 0, 0);
 		Vector3 Target = rec.p + rec.normal + RandomInUnitSphere();
-		return 0.5f* Color(Ray(rec.p, Target - rec.p), World);
+		return 0.5f* Color(Ray(rec.p, Target - rec.p), World, 0);
 	}
 	else
 	{

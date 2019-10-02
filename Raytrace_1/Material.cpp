@@ -14,3 +14,25 @@ Vector3 RandomInUnitSphere()
 
 	return p;
 }
+
+Vector3 Reflect(const Vector3& v, const Vector3& n)
+{
+	return v - 2 * dot(v, n)*n;
+}
+
+bool Lambertian::Scatter(const Ray & rayin, const HitRecord & rec, Vector3 & attenuation, Ray & scattered) const
+{
+	Vector3 Target = rec.p + rec.normal + RandomInUnitSphere();
+	scattered = Ray(rec.p, Target - rec.p);
+	attenuation = Albedo;
+	return true;
+}
+
+bool Metal::Scatter(const Ray & rayin, const HitRecord & rec, Vector3 & attenuation, Ray & scattered) const
+{
+	Vector3 Reflected = Reflect(unit_vector(rayin.Direction()), rec.normal);
+	scattered = Ray(rec.p, Reflected);
+	attenuation = Albedo;
+
+	return (dot(scattered.Direction(), rec.normal) > 0);
+}

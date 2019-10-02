@@ -6,10 +6,11 @@ class Sphere :
 private:
 	Vector3 Center;
 	float Radius;
+	Material* matptr;
 public:
 
 	Sphere();
-	Sphere(Vector3 cen, float r) : Center(cen), Radius(r) {};
+	Sphere(Vector3 cen, float r, Material* mat) : Center(cen), Radius(r), matptr(mat) {};
 
 	~Sphere();
 

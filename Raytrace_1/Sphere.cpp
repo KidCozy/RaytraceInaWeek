@@ -19,7 +19,7 @@ bool Sphere::hit(const Ray & r, float t_min, float t_max, HitRecord & rec) const
 	float c = dot(oc, oc) - Radius * Radius;
 	float discriminant = b * b - a * c;
 
-	std::cout << a << std::endl;
+	//std::cout << a << std::endl;
 
 	if (discriminant > 0)
 	{
@@ -29,6 +29,7 @@ bool Sphere::hit(const Ray & r, float t_min, float t_max, HitRecord & rec) const
 			rec.t = temp;
 			rec.p = r.PointAtParameter(rec.t);
 			rec.normal = (rec.p - Center) / Radius;
+			rec.matptr = matptr;
 			return true;
 		}
 		temp = (-b + sqrt(discriminant)) / a;
@@ -37,6 +38,7 @@ bool Sphere::hit(const Ray & r, float t_min, float t_max, HitRecord & rec) const
 			rec.t = temp;
 			rec.p = r.PointAtParameter(rec.t);
 			rec.normal = (rec.p - Center) / Radius;
+			rec.matptr = matptr;
 			return true;
 		}
 
