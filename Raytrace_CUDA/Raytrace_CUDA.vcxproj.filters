@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="CUDARender.cu" />
+    <CudaCompile Include="Camera.cu">
+      <Filter>CUDA\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Hit.cu">
+      <Filter>CUDA\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="HittableList.cu">
+      <Filter>CUDA\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Material.cu">
+      <Filter>CUDA\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Ray.cu">
+      <Filter>CUDA\cu</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Sphere.cu">
+      <Filter>CUDA\cu</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CUDA">
+      <UniqueIdentifier>{7ef27c98-213f-44e6-a882-c9cf812b2455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CUDA\cuh">
+      <UniqueIdentifier>{e5b4327e-ae45-48ee-a7c4-d5fcb912017a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CUDA\cu">
+      <UniqueIdentifier>{c39ca49f-719e-415f-9f46-8a039ecd02c9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CUDARender.cuh" />
+    <ClInclude Include="3DMath.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+    <ClInclude Include="Hit.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+    <ClInclude Include="HittableList.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.cuh">
+      <Filter>CUDA\cuh</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+</Project>

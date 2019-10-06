@@ -19,13 +19,18 @@ bool RenderPipe::Update()
 		return false;
 
 	Vector3 LowLeftCorner(-2.0f, -1.5f, -1.0f);
-	Hittable* List[4];
-	List[0] = new Sphere(Vector3(0, 0, -1), 0.5f, new Lambertian(Vector3(0.8f, 0.3f, 0.3f)));
-	List[1] = new Sphere(Vector3(0, -100.5f, -1), 100, new Lambertian(Vector3(0.8f,0.8f,0.0f)));
-	List[2] = new Sphere(Vector3(1.0f, 0.0f, -1.0f), 0.5f, new Metal(Vector3(0.8f, 0.6f, 0.2f)));
-	List[3] = new Sphere(Vector3(-1.0f, 0.0f, -1.0f), 0.5f, new Metal(Vector3(0.8f, 0.8f, 0.8f)));
-	Hittable* World = new HittableList(List, 4);
-	Camera Cam;
+	Hittable* List[5];
+	Camera Cam(Vector3(-2,2,1), Vector3(0,0,-1), Vector3(0,1,0), 60, ASPECTRATIO);
+	float R = cos(M_PI / 4);
+
+	List[0] = new Sphere(Vector3(0, 0, -1), 0.5f, new Lambertian(Vector3(0.1f, 0.2f, 0.5f)));
+	List[1] = new Sphere(Vector3(0, -100.5f, -1), 100.0f, new Lambertian(Vector3(0.8f,0.8f,0.0f)));
+	List[2] = new Sphere(Vector3(1, 0, -1), 0.5f, new Metal(Vector3(0.8f,0.6f,0.2f), 0.3f));
+	List[3] = new Sphere(Vector3(-1, 0, -1), 0.5f, new Dielectric(1.5f));
+	List[4] = new Sphere(Vector3(-1, 0, -1), -0.45f, new Dielectric(1.5f));
+	Hittable* World = new HittableList(List, 5);
+
+
 	// 수직과 수평 벡터의 비율은 원하는 뷰포트 비율로 설정한다.
 	// 나의 경우 (800, 600) 이므로 4:3 비율로 정하였다.
 	Vector3 Horizontal(4.0f, 0.0f, 0.0f);
@@ -57,7 +62,7 @@ bool RenderPipe::Update()
 			int ig = int(255.99*color[1]);
 			int ib = int(255.99*color[2]);
 
-		//	OutImage << ir << " " << ig << " " << ib << "\n";
+			OutImage << ir << " " << ig << " " << ib << "\n";
 
 			ScreenColors[y][x] = RGB(ir, ig, ib);
 		}

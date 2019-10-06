@@ -12,8 +12,8 @@
 #include<time.h>
 #define WIDTH 800
 #define HEIGHT 600
-#define RATIO WIDTH/HEIGHT
-#define SAMPLE 100
+#define ASPECTRATIO WIDTH/HEIGHT
+#define SAMPLE 1
 class RenderPipe
 {
 private:

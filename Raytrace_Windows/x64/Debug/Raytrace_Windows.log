@@ -1,0 +1,6 @@
+﻿  Compiling CUDA source file CUDARender.cu...
+  
+  C:\Users\pencu\source\repos\Raytrace_Console\Raytrace_Windows>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin\nvcc.exe" -gencode=arch=compute_35,code=\"sm_35,compute_35\" --use-local-env -ccbin "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64" -x cu  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -D_DEBUG -D_WINDOWS -D_UNICODE -DUNICODE -Xcompiler "/EHsc /W0 /nologo /Od /Fdx64\Debug\vc141.pdb /FS /Zi /RTC1 /MDd " -o x64\Debug\CUDARender.cu.obj "C:\Users\pencu\source\repos\Raytrace_Console\Raytrace_Windows\CUDARender.cu" 
+  CUDARender.cu
+  Raytrace_Windows.cpp
+  Raytrace_Windows.vcxproj -> C:\Users\pencu\source\repos\Raytrace_Console\x64\Debug\Raytrace_Windows.exe

@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "Raytrace_1.h"
-#include"RenderPipe.h"
+#include "RenderPipe.h"
 
 #define MAX_LOADSTRING 100
 
@@ -131,8 +131,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 	{
 		dc = GetDC(hWnd);
-
+		
 	}
+	break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);

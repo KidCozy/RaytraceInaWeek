@@ -1,1 +1,6 @@
-﻿  Raytrace_1.vcxproj -> C:\Users\pencu\source\repos\Raytrace_Console\Debug\Raytrace_1.exe
+﻿  Raytrace_1.cpp
+  RenderPipe.cpp
+c:\users\pencu\source\repos\raytrace_console\raytrace_1\renderpipe.cpp(24): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\pencu\source\repos\raytrace_console\raytrace_1\renderpipe.cpp(127): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  Raytrace_1.vcxproj -> C:\Users\pencu\source\repos\Raytrace_Console\Debug\Raytrace_1.exe

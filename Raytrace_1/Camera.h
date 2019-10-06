@@ -9,7 +9,7 @@ private:
 	Vector3 Vertical;
 
 public:
-	Camera();
+	Camera(Vector3 Eye, Vector3 At, Vector3 Up, float vFov, float Aspect);
 	~Camera();
 	Ray GetRay(float u, float v) { return Ray(Origin, LowLeftCorner + u * Horizontal + v * Vertical - Origin); }
 };
