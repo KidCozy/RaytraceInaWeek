@@ -14,6 +14,8 @@
 #define HEIGHT 600
 #define ASPECTRATIO WIDTH/HEIGHT
 #define SAMPLE 1
+#define BYTES_PER_PIXEL 3 // RGB
+#define BITS_PER_PIXEL 24
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,10 +23,19 @@ extern "C" {
 	class CUDARender
 	{
 	private:
-		HDC MainDC;
+		HDC MainDC, MemoryDC;
+		BYTE* ScreenBits;
+		HWND hwnd;
 
-		COLORREF ScreenColors[HEIGHT][WIDTH];
+		VColor ScreenColors[HEIGHT][WIDTH];
+
+		HBITMAP DIBitmap;
+		HBITMAP OldDIBitmap;
+
+		VColor CurrentColor;
+
 	//	std::ofstream OutImage;
+		UINT BytesPerScanline = (WIDTH * BYTES_PER_PIXEL + 3) & ~3;
 		time_t Timer;
 		double ElapsedTime;
 	public:
@@ -38,6 +49,14 @@ extern "C" {
 		Vector3 Color(const Ray& ray, Hittable *World, int depth);
 		float HitSphere(const Vector3& center, float radius, const Ray& ray);
 
+		void SetHwndPointer(HWND& hWnd) { hwnd = hWnd; }
+
+		void Clear(VColor ClearColor);
+		void SwapBuffer();
+
+		void SetPixel(UINT x, UINT y);
+		bool IsInScreen(UINT x, UINT y);
+
 		CUDARender();
 		~CUDARender();
 	};
@@ -46,6 +65,8 @@ extern "C" {
 }
 #endif
 
+
+/***********obsolete**********/
 //class CUDARender
 //{
 //	private:

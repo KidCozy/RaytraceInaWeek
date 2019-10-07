@@ -10,9 +10,20 @@
 
 bool CUDARender::Init(HDC dc)
 {
-	MainDC = dc;
-	//OutImage = std::ofstream("image.png");
-	//AllocConsole();
+	MainDC = GetDC(hwnd);
+	MemoryDC = CreateCompatibleDC(MainDC);
+	
+	BITMAPINFO ScreenDesc{};
+	ScreenDesc.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	ScreenDesc.bmiHeader.biWidth = WIDTH;
+	ScreenDesc.bmiHeader.biHeight = -HEIGHT;
+	ScreenDesc.bmiHeader.biPlanes = 1;
+	ScreenDesc.bmiHeader.biBitCount = BITS_PER_PIXEL;
+	ScreenDesc.bmiHeader.biCompression = BI_RGB;
+
+	DIBitmap = CreateDIBSection(MemoryDC, &ScreenDesc, DIB_RGB_COLORS, (LPVOID*)&ScreenBits, NULL, NULL);
+	OldDIBitmap = (HBITMAP)SelectObject(MemoryDC, DIBitmap);
+
 
 	Timer = time(NULL);
 
@@ -21,6 +32,8 @@ bool CUDARender::Init(HDC dc)
 
 bool CUDARender::Update()
 {
+//	Clear(VColor(0.0f,0.0f,0.0f));
+
 	if (RenderDone)
 		return false;
 
@@ -68,9 +81,7 @@ bool CUDARender::Update()
 			int ig = int(255.99*color[1]);
 			int ib = int(255.99*color[2]);
 
-			//	OutImage << ir << " " << ig << " " << ib << "\n";
-
-			ScreenColors[y][x] = RGB(ir, ig, ib);
+			ScreenColors[y][x].SetRGB(ir, ig, ib);
 		}
 	}
 
@@ -83,7 +94,7 @@ bool CUDARender::Update()
 
 bool CUDARender::Render()
 {
-
+	SwapBuffer();
 	if (RenderDone)
 		return false;
 
@@ -93,16 +104,17 @@ bool CUDARender::Render()
 		for (int x = 0; x < WIDTH; x++)
 		{
 
-			SetPixel(MainDC, x, y, ScreenColors[HEIGHT - y][x]);
+			
+			CurrentColor.SetRGB(ScreenColors[HEIGHT - y][x]);
+
+			SetPixel(x, y);
 
 		}
 	}
 
-	//wchar_t Buffer[256];
-	//wsprintf(Buffer, L"%f", ElapsedTime);
-	//TextOutW(MainDC, 0, 0, Buffer, 1);
-	//std::cout << ElapsedTime << std::endl;
 	printf("%f", ElapsedTime);
+
+	
 
 	RenderDone = true;
 
@@ -111,6 +123,9 @@ bool CUDARender::Render()
 
 bool CUDARender::Release()
 {
+	SelectObject(MemoryDC, OldDIBitmap);
+	DeleteObject(DIBitmap);
+	ReleaseDC(hwnd, MemoryDC);
 	return true;
 }
 
@@ -153,6 +168,56 @@ float CUDARender::HitSphere(const Vector3 & center, float radius, const Ray & ra
 
 	else
 		return (-b - sqrt(discriminant)) / (2.0*a);
+}
+
+void CUDARender::Clear(VColor ClearColor)
+{
+	
+
+	UINT Offset = 0;
+	while (Offset < BytesPerScanline)
+	{
+		*((DWORD*)(ScreenBits + Offset)) = *(DWORD*)ClearColor.GetRGB(); // 0x00000000
+		Offset += BYTES_PER_PIXEL;
+
+	}
+
+	Offset = BytesPerScanline;
+
+
+	for (int i = 0; i < HEIGHT - 1; i++)
+	{
+		memcpy(ScreenBits + Offset, ScreenBits, BytesPerScanline);
+		Offset += BytesPerScanline;
+	}
+
+}
+
+void CUDARender::SwapBuffer()
+{
+	BitBlt(MainDC, 0, 0, WIDTH, HEIGHT, MemoryDC, 0, 0, SRCCOPY);
+}
+
+void CUDARender::SetPixel(UINT x, UINT y)
+{
+
+	if (!IsInScreen(x, y))
+		return;
+
+	int Offset = (y * BytesPerScanline) + (x * BYTES_PER_PIXEL);
+
+	*(ScreenBits + Offset + 0) = CurrentColor._0;
+	*(ScreenBits + Offset + 1) = CurrentColor._1;
+	*(ScreenBits + Offset + 2) = CurrentColor._2;
+}
+
+bool CUDARender::IsInScreen(UINT x, UINT y)
+{
+	if (x > WIDTH || x < 0 || y > HEIGHT || y < 0)
+		return false;
+
+	return true;
+		
 }
 
 CUDARender::CUDARender()

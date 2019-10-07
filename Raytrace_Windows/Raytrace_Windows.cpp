@@ -117,6 +117,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, WIDTH, HEIGHT, 0, nullptr, nullptr, hInstance, nullptr);
 
+   RP.SetHwndPointer(hWnd);
+
    if (!hWnd)
    {
       return FALSE;
@@ -165,7 +167,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	case WM_DESTROY:
-		ReleaseDC(hWnd, dc);
 		PostQuitMessage(0);
 		break;
 	default:

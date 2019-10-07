@@ -4,6 +4,7 @@
 #include<iostream>
 #include<math.h>
 #include<stdlib.h>
+#include<Windows.h>
 
 struct Vector2
 {
@@ -48,6 +49,7 @@ public:
 	inline float squared_length() const { return _0 * _0 + _1 * _1 + _2 * _2; }
 	inline void make_unit_vector();
 
+
 	union {
 		float e[3];
 		struct {
@@ -58,6 +60,26 @@ public:
 	};
 
 
+
+};
+
+struct VColor
+{
+	union {
+		int e[3];
+		struct {
+			int _0;
+			int _1;
+			int _2;
+		};
+	};
+
+	inline void SetRGB(float  R, float G, float B) { _2 = R; _1 = G; _0 = B; }
+	inline void SetRGB(VColor Color) { _2 = Color._2; _1 = Color._1; _0 = Color._0; }
+	inline int* GetRGB() { return &e[0]; }
+
+	VColor() { }
+	VColor(float x, float y, float z) { _2 = x * 255.99f; _1 = y * 255.99f; _0 = z * 255.99f; }
 
 };
 
